@@ -198,7 +198,9 @@ int main() {
     }
 
     std::cout << "游戏结束. 按 Enter 退出." << std::endl;
+
     std::cin.get();
     std::cin.get();
+
     return 0;
 }

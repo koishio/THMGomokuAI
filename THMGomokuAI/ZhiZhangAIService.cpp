@@ -3,7 +3,6 @@
 // 静态成员定义
 std::vector<std::vector<int64_t>> ZhiZhangAIService::BLACK_ZOBRIST;
 std::vector<std::vector<int64_t>> ZhiZhangAIService::WHITE_ZOBRIST;
-// std::unordered_map<std::string, int> ZhiZhangAIService::SCORE;
 std::mt19937_64 ZhiZhangAIService::RNG(std::chrono::steady_clock::now().time_since_epoch().count());
 
 // 定义静态成员
@@ -21,15 +20,6 @@ ZhiZhangAIService::CHESS_MODELS = {
 };
 
 void ZhiZhangAIService::initStaticData() {
-    // 初始化分数表
-    /*
-    for (const auto& entry : CHESS_MODELS) {
-        for (const auto& val : entry.second.values) {
-            SCORE[val] = entry.second.score;
-        }
-    }
-    */
-
     // 初始化 Zobrist 随机表
     BLACK_ZOBRIST.resize(BOARD_SIZE, std::vector<int64_t>(BOARD_SIZE));
     WHITE_ZOBRIST.resize(BOARD_SIZE, std::vector<int64_t>(BOARD_SIZE));
@@ -61,8 +51,8 @@ ZhiZhangAIService::ZhiZhangAIService(const AIConfig& config) : aiConfig(config) 
 
 // 初始化棋盘数据
 void ZhiZhangAIService::initChessData(const std::vector<std::vector<int>>& data) {
-    rows = data.size();
-    cols = data[0].size();
+    rows = static_cast<int>(data.size());
+    cols = static_cast<int>(data[0].size());
     chessData.assign(cols, std::vector<int>(rows, 0));
     int chessTotal = 0;
     for (int i = 0; i < cols; ++i) {
@@ -98,8 +88,8 @@ int64_t ZhiZhangAIService::calculateHashCode(const Point& point) {
 
 // 判断胜负/平局
 Statue ZhiZhangAIService::getStatue(const std::vector<std::vector<int>>& chessData, const Point& point) {
-    int rows = chessData[0].size();
-    int cols = chessData.size();
+    int rows = static_cast<int>(chessData[0].size());
+    int cols = static_cast<int>(chessData.size());
     int x = point.x;
     int y = point.y;
     int type = point.type;
@@ -225,7 +215,7 @@ Point ZhiZhangAIService::getPoint(const std::vector<std::vector<int>>& chessData
 
     statistics.point = bestPoint;
     statistics.score = bestPoint.score;
-    statistics.caches = situationCacheMap.size();
+    statistics.caches = static_cast<int>(situationCacheMap.size());
 
     if (aiConfig.debug) {
         std::cout << "============AI 统计[第" << rounds << "回合]==========" << std::endl;

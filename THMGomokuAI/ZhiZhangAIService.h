@@ -115,7 +115,7 @@ private:
         int depth;
 
         SituationCache(int score = 0, int depth = 0) : score(score), depth(depth) {}
-        SituationCache(const Point& p, int d) : point(p), depth(d) {}
+        SituationCache(const Point& p, int d) : point(p), score(0), depth(d) {}
     };
 
     // 静态成员：Zobrist 随机数表
