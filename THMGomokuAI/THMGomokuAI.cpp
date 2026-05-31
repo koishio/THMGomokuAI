@@ -3,9 +3,10 @@
 #include <iostream>
 #include <vector>
 #include <limits>
-#include <functional>
+#include <concepts>
+#include <type_traits>
 
-// 辅助函数：打印棋盘（可选，用于调试）
+// 辅助函数：打印棋盘
 void printBoard(const std::vector<std::vector<int>>& board) {
     std::cout << "\n   ";
     for (int i = 0; i < board.size(); ++i)
@@ -26,7 +27,13 @@ void printBoard(const std::vector<std::vector<int>>& board) {
 }
 
 template <typename T>
-T getInput(const std::string& message, std::function<bool(const T&)> condition) {
+concept Streamable = requires(std::istream & is, T & v) {
+    is >> v;
+};
+
+template <Streamable T, typename Pred>
+    requires std::predicate<Pred&, const T&>
+T getInput(const std::string& message, Pred&& condition) {
     T input;
     while (true) {
         std::cout << message;
@@ -55,7 +62,7 @@ int main() {
     std::unique_ptr<AIConfig> config = nullptr;
 
     std::cout << "----- [ Touhou Little Maid 五子棋 AI 对战 ] -----\n\n";
-    std::cout << "  * 原项目地址: https://github.com/TartaricAcid/TouhouLittleMaid\n\n";
+    std::cout << "  * 五子棋 AI 原项目地址: https://github.com/TartaricAcid/TouhouLittleMaid\n\n";
 
     char choice = getInput<char>("是否使用默认难度配置 (Y/N): ",
         [](char c) {
@@ -66,11 +73,11 @@ int main() {
         std::cout << "使用默认难度配置.\n";
         config = std::make_unique<AIConfig>(6, 10, false, 0, 6);
     } else {
-        char debug_c = getInput<char>("是否开启调试模式 (Y/N): ",
+        char debugChar = getInput<char>("是否开启调试模式 (Y/N): ",
             [](char c) {
                 return c == 'Y' || c == 'y' || c == 'N' || c == 'n';
             });
-        debug = debug_c == 'Y' || debug_c == 'y';
+        debug = debugChar == 'Y' || debugChar == 'y';
         depth = getInput<int>("输入搜索深度 (默认为6): ",
             [](int v) {
                 return v > 0;
@@ -102,19 +109,6 @@ int main() {
     bool playerTurn = true;
     bool gameOver = false;
     Point lastMove;
-
-    // 如果 AI 先走，需要先执行一步 AI 落子（取消下面注释）
-    /*
-    if (!playerTurn) {
-        Point aiMove = ai.getPoint(chessData, Point(0, 0, playerType)); // 传入无效点
-        chessData[aiMove.x][aiMove.y] = aiMove.type;
-        lastMove = aiMove;
-        playerTurn = true;   // 切换为玩家走
-        std::cout << "女仆 落子: (" << aiMove.x << "," << aiMove.y << ")" << std::endl;
-        printBoard(chessData);
-        // 检查 AI 是否胜利（略，后面循环会统一判断）
-    }
-    */
 
     // 主游戏循环
     while (!gameOver) {

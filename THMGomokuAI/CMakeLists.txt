@@ -3,7 +3,7 @@
 #
 
 # 将源代码添加到此项目的可执行文件。
-add_executable (THMGomokuAI "THMGomokuAI.cpp" "THMGomokuAI.h" "ZhiZhangAIService.cpp")
+add_executable (THMGomokuAI "THMGomokuAI.cpp"  "ZhiZhangAIService.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET THMGomokuAI PROPERTY CXX_STANDARD 20)
