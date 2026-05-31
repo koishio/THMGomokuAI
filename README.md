@@ -29,13 +29,13 @@
 
 ### 环境要求
 
-- C++11 或更高版本编译器（GCC、Clang、MSVC 均可）
+- C++20 或更高版本编译器（GCC、Clang、MSVC 均可）
 - 仅依赖 C++ 标准库（无第三方依赖）
 
 ### 编译示例（Linux / macOS）
 
 ```bash
-g++ -std=c++11 -O2 THMGomokuAI.cpp ZhiZhangAIService.cpp -o gomoku_ai
+g++ -std=c++20 -O2 THMGomokuAI.cpp ZhiZhangAIService.cpp -o gomoku_ai
 ```
 
 ### 运行
