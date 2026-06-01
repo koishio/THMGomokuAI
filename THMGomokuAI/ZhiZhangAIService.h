@@ -1,7 +1,17 @@
-﻿// ZhiZhangAIService.h
+﻿/*
+ * This file is a C++ adaptation of the Gomoku AI from the Touhou Little Maid project.
+ * Original work: Copyright (c) 2019-2025 tartaric_acid, for the code part
+ * Modifications: Copyright (c) 2026 koishio
+ *
+ * Licensed under the MIT License.
+ * See the LICENSE file in the root of this project for details.
+ */
+
+// ZhiZhangAIService.h
 // commit: db8bd02
 
-#pragma once
+#ifndef ZHI_ZHANG_AI_SERVICE_H
+#define ZHI_ZHANG_AI_SERVICE_H
 
 #include <vector>
 #include <stack>
@@ -174,3 +184,4 @@ private:
     static const int BOARD_SIZE = 15;         // 棋盘最大尺寸
 };
 
+#endif // ZHIZHANGAISERVICE_H

@@ -1,4 +1,13 @@
-﻿#include "ZhiZhangAIService.h"
+﻿/*
+ * This file is a C++ adaptation of the Gomoku AI from the Touhou Little Maid project.
+ * Original work: Copyright (c) 2019-2025 tartaric_acid, for the code part
+ * Modifications: Copyright (c) 2026 koishio
+ *
+ * Licensed under the MIT License.
+ * See the LICENSE file in the root of this project for details.
+ */
+
+#include "ZhiZhangAIService.h"
 
 // 静态成员定义
 std::vector<std::vector<int64_t>> ZhiZhangAIService::BLACK_ZOBRIST;
