@@ -1,11 +1,15 @@
 ﻿// THMGomokuAI.cpp: 五子棋人机对战主程序（支持重新开局、选择先手）
 #include "ZhiZhangAIService.h"
+
 #include <iostream>
 #include <vector>
 #include <limits>
 #include <concepts>
 #include <type_traits>
 #include <memory>
+#include <future>
+#include <chrono>
+#include <thread>
 
 // 辅助函数：打印棋盘
 void printBoard(const std::vector<std::vector<int>>& board) {
@@ -129,10 +133,17 @@ int main() {
 
         // 如果 AI 先手，让它走第一步（天元）
         if (aiFirst) {
-            std::cout << " * AI 思考中..." << std::endl;
             // 传入一个虚拟的上一步（玩家类型），AI 会根据规则首子天元
             Point dummyLastMove(-1, -1, playerType);
-            Point aiMove = ai.getPoint(chessData, dummyLastMove);
+            std::future<Point> future = std::async(std::launch::async, &ZhiZhangAIService::getPoint, &ai, std::cref(chessData), dummyLastMove);
+            const char spin[] = "|/-\\";
+            int spin_idx = 0;
+            while (future.wait_for(std::chrono::milliseconds(200)) != std::future_status::ready) {
+                std::cout << "\r * AI 思考中 " << spin[spin_idx % 4] << std::flush;
+                spin_idx = (spin_idx + 1) % 4;
+            }
+            std::cout << "\r" << std::string(20, ' ') << "\r";
+            Point aiMove = future.get();
             if (aiMove.x < 0 || aiMove.x >= BOARD_SIZE || aiMove.y < 0 || aiMove.y >= BOARD_SIZE ||
                 chessData[aiMove.x][aiMove.y] != 0) {
                 std::cout << "AI 返回无效落子，游戏终止。" << std::endl;
@@ -203,8 +214,15 @@ int main() {
             }
             else {
                 // ----- AI 回合 -----
-                std::cout << " * AI 思考中..." << std::endl;
-                Point aiMove = ai.getPoint(chessData, lastMove);
+                std::future<Point> future = std::async(std::launch::async, &ZhiZhangAIService::getPoint, &ai, std::cref(chessData), lastMove);
+                const char spin[] = "|/-\\";
+                int spin_idx = 0;
+                while (future.wait_for(std::chrono::milliseconds(200)) != std::future_status::ready) {
+                    std::cout << "\r * AI 思考中 " << spin[spin_idx % 4] << std::flush;
+                    spin_idx = (spin_idx + 1) % 4;
+                }
+                std::cout << "\r" << std::string(20, ' ') << "\r";
+                Point aiMove = future.get();
                 if (aiMove.x < 0 || aiMove.x >= BOARD_SIZE || aiMove.y < 0 || aiMove.y >= BOARD_SIZE ||
                     chessData[aiMove.x][aiMove.y] != 0) {
                     std::cout << " ! AI 返回异常落子，游戏结束。" << std::endl;
