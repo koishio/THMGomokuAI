@@ -28,20 +28,34 @@
 ## 编译与运行
 
 ### 环境要求
+- C++20 编译器（GCC 10+、Clang 10+、MSVC 2019 16.8+）
+- CMake 3.10 或更高版本
 
-- C++20 或更高版本编译器（GCC、Clang、MSVC 均可）
-- 仅依赖 C++ 标准库（无第三方依赖）
-
-### 编译示例（Linux / macOS）
+### 编译步骤
 
 ```bash
-g++ -std=c++20 -O2 THMGomokuAI.cpp ZhiZhangAIService.cpp -o gomoku_ai
+# 克隆或进入项目根目录
+cd THMGomokuAI
+
+# 创建构建目录
+mkdir build && cd build
+
+# 配置项目
+cmake ..
+
+# 编译（Release 模式）
+cmake --build . --config Release
 ```
 
 ### 运行
 
 ```bash
-./gomoku_ai
+# 进入可执行文件所在目录
+# Windows
+./Release/THMGomokuAI.exe
+
+# Linux/macOS
+./THMGomokuAI
 ```
 
 ## 使用说明
